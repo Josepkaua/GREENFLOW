@@ -2,6 +2,8 @@
   "compilerOptions": {
     "composite": true,
     "skipLibCheck": true,
+    "outDir": "./.tsc-cache/node",
+    "tsBuildInfoFile": "./.tsc-cache/node.tsbuildinfo",
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "target": "ES2022",

@@ -66,13 +66,6 @@ async function main() {
 
   await clickByText(page, 'button', '+ Nova sala')
   await page.waitForTimeout(300)
-  await shot(page, 'debug-apos-click-nova-sala')
-  const diag = await page.evaluate(() => ({
-    testids: [...document.querySelectorAll('[data-testid]')].map((e) => e.getAttribute('data-testid')),
-    hasSalaNome: !!document.querySelector('[data-testid="sala-nome"]'),
-    modalCount: document.querySelectorAll('.fixed.inset-0').length
-  }))
-  console.log('DIAG:', JSON.stringify(diag))
   await page.fill('[data-testid="sala-nome"]', 'Sala 101')
   await page.fill('[data-testid="sala-comprimento"]', '6')
   await page.fill('[data-testid="sala-largura"]', '5')

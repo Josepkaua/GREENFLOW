@@ -62,7 +62,7 @@ export function SalaFormModal({ sala, onClose, onSaved }: SalaFormModalProps): J
   return (
     <Modal title={sala ? 'Editar sala' : 'Nova sala'} onClose={onClose}>
       <form onSubmit={handleSubmit} className="space-y-4">
-        <Field label="Nome da sala MARCADOR_TESTE_999">
+        <Field label="Nome da sala">
           <input
             required
             data-testid="sala-nome"

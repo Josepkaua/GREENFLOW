@@ -1,5 +1,7 @@
 node_modules/
 out/
 dist/
+.tsc-cache/
+.smoke-screenshots/
 *.log
 .DS_Store

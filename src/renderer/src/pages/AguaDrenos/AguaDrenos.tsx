@@ -63,10 +63,11 @@ export default function AguaDrenos(): JSX.Element {
           {linhas.length > 0 && (
             <tfoot className="bg-gray-50 font-medium dark:bg-gray-800">
               <tr>
-                <td className="px-4 py-3" colSpan={4}>
+                <td className="px-4 py-3" colSpan={3}>
                   Total estimado por dia
                 </td>
                 <td className="px-4 py-3">{formatNumber(totalDia)} L/dia</td>
+                <td className="px-4 py-3"></td>
               </tr>
             </tfoot>
           )}

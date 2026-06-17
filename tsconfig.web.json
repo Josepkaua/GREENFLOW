@@ -2,6 +2,8 @@
   "compilerOptions": {
     "composite": true,
     "skipLibCheck": true,
+    "outDir": "./.tsc-cache/web",
+    "tsBuildInfoFile": "./.tsc-cache/web.tsbuildinfo",
     "target": "ES2022",
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "useDefineForClassFields": true,

@@ -40,10 +40,12 @@ export default function Graficos(): JSX.Element {
 
   const dadosCusto = salas.map((s) => ({ nome: s.nome, custo: Number(s.gastoMensal.toFixed(2)) }))
 
-  const dadosStatus = (['subdimensionado', 'adequado', 'superdimensionado'] as const).map((status) => ({
-    status,
-    quantidade: salas.filter((s) => s.status === status && s.ares.length > 0).length
-  }))
+  const dadosStatus = (['subdimensionado', 'adequado', 'superdimensionado'] as const)
+    .map((status) => ({
+      status,
+      quantidade: salas.filter((s) => s.status === status && s.ares.length > 0).length
+    }))
+    .filter((d) => d.quantidade > 0)
 
   const dadosAgua = salas.map((s) => ({
     nome: s.nome,
