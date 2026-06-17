@@ -1,0 +1,43 @@
+{
+  "name": "green-flow",
+  "version": "1.0.0",
+  "description": "Green Flow - gestão inteligente de ares-condicionados em instituições de ensino",
+  "main": "./out/main/index.js",
+  "author": "Green Flow",
+  "private": true,
+  "scripts": {
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "postinstall": "electron-builder install-app-deps",
+    "start": "electron-vite preview",
+    "icon:generate": "node scripts/generate-icon.mjs",
+    "dist:win": "electron-vite build && electron-builder --win"
+  },
+  "dependencies": {
+    "better-sqlite3": "^12.11.1",
+    "jspdf": "^2.5.2",
+    "jspdf-autotable": "^3.8.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.2",
+    "recharts": "^2.12.7"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.11",
+    "@types/node": "^20.14.0",
+    "@types/react": "^18.3.5",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.20",
+    "electron": "^31.4.0",
+    "electron-builder": "^24.13.3",
+    "electron-vite": "^2.3.0",
+    "playwright-core": "^1.61.0",
+    "png-to-ico": "^2.1.8",
+    "pngjs": "^7.0.0",
+    "postcss": "^8.4.45",
+    "tailwindcss": "^3.4.10",
+    "typescript": "^5.5.4",
+    "vite": "^5.4.3"
+  }
+}
