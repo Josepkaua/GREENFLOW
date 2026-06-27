@@ -39,7 +39,7 @@ export default function CalculadoraBTU(): JSX.Element {
           <Field label="Largura (m)">
             <input type="number" step="0.1" min="0" className={inputClass} value={form.largura} onChange={(e) => update('largura', Number(e.target.value))} />
           </Field>
-          <Field label="Pé-direito (m)">
+          <Field label="Altura (m)">
             <input type="number" step="0.1" min="0" className={inputClass} value={form.altura} onChange={(e) => update('altura', Number(e.target.value))} />
           </Field>
         </div>
@@ -91,7 +91,7 @@ export default function CalculadoraBTU(): JSX.Element {
             <dd>{Math.round(detalhamento.btuBase).toLocaleString('pt-BR')} BTU</dd>
           </div>
           <div className="flex justify-between">
-            <dt className="text-gray-500 dark:text-gray-400">Correção pé-direito</dt>
+            <dt className="text-gray-500 dark:text-gray-400">Correção altura</dt>
             <dd>+{Math.round(detalhamento.percentualPeDireito * 100)}%</dd>
           </div>
           <div className="flex justify-between">

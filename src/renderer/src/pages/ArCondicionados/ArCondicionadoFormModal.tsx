@@ -51,6 +51,8 @@ export function ArCondicionadoFormModal({ ac, salas, salaIdPadrao, onClose, onSa
       else await window.api.ac.create(form)
       onSaved()
       onClose()
+    } catch (err) {
+      alert(`Não foi possível salvar o ar-condicionado: ${err instanceof Error ? err.message : err}`)
     } finally {
       setSalvando(false)
     }

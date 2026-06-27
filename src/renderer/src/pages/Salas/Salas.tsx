@@ -17,8 +17,12 @@ export default function Salas(): JSX.Element {
 
   async function excluir(id: number): Promise<void> {
     if (!confirm('Excluir esta sala e os ares-condicionados vinculados a ela?')) return
-    await window.api.salas.remove(id)
-    carregar()
+    try {
+      await window.api.salas.remove(id)
+      carregar()
+    } catch (err) {
+      alert(`Não foi possível excluir a sala: ${err instanceof Error ? err.message : err}`)
+    }
   }
 
   return (

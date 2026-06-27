@@ -102,6 +102,8 @@ export default function RelatorioPDF(): JSX.Element {
       const buffer = doc.output('arraybuffer')
       const resultado = await window.api.pdf.save(buffer)
       setMensagem(resultado.saved ? `Relatório salvo em: ${resultado.filePath}` : 'Geração cancelada.')
+    } catch (err) {
+      setMensagem(`Não foi possível gerar o relatório: ${err instanceof Error ? err.message : err}`)
     } finally {
       setGerando(false)
     }

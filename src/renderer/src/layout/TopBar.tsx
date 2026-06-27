@@ -30,7 +30,11 @@ export function TopBar(): JSX.Element {
       <h1 className="text-lg font-semibold">{TITLES[location.pathname] ?? 'Green Flow'}</h1>
       <button
         type="button"
-        onClick={() => updateConfig({ ...config, tema: tema.proximo })}
+        onClick={() =>
+          updateConfig({ ...config, tema: tema.proximo }).catch((err: unknown) =>
+            alert(`Não foi possível trocar o tema: ${err instanceof Error ? err.message : err}`)
+          )
+        }
         className="flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
         title="Alternar tema"
       >

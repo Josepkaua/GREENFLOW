@@ -41,9 +41,11 @@ export function getSalasComDimensionamento(): SalaComDimensionamento[] {
 
 export function getDashboardSummary(): DashboardSummary {
   const salas = getSalasComDimensionamento()
+  // salas sem nenhum AC ainda não são "subdimensionadas" — só ainda não têm aparelho
+  const salasComAr = salas.filter((s) => s.ares.length > 0)
 
   const sugestoesTroca = sugerirTrocas(
-    salas.map((s) => ({ id: s.id, nome: s.nome, btuInstaladoTotal: s.btuInstaladoTotal, btuNecessario: s.btu_necessario }))
+    salasComAr.map((s) => ({ id: s.id, nome: s.nome, btuInstaladoTotal: s.btuInstaladoTotal, btuNecessario: s.btu_necessario }))
   )
 
   return {
@@ -51,9 +53,9 @@ export function getDashboardSummary(): DashboardSummary {
     numAres: salas.reduce((sum, s) => sum + s.ares.length, 0),
     gastoMensalTotal: salas.reduce((sum, s) => sum + s.gastoMensal, 0),
     litrosDiaTotal: salas.reduce((sum, s) => sum + s.litrosDia, 0),
-    subdimensionadas: salas.filter((s) => s.status === 'subdimensionado').length,
-    adequadas: salas.filter((s) => s.status === 'adequado').length,
-    superdimensionadas: salas.filter((s) => s.status === 'superdimensionado').length,
+    subdimensionadas: salasComAr.filter((s) => s.status === 'subdimensionado').length,
+    adequadas: salasComAr.filter((s) => s.status === 'adequado').length,
+    superdimensionadas: salasComAr.filter((s) => s.status === 'superdimensionado').length,
     sugestoesTroca
   }
 }

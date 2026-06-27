@@ -11,13 +11,22 @@ export default function Configuracoes(): JSX.Element {
 
   async function salvar(e: React.FormEvent): Promise<void> {
     e.preventDefault()
-    await updateConfig({ tarifa_kwh: tarifa, umidade_relativa: umidade, tema: config.tema })
-    setSalvo(true)
-    setTimeout(() => setSalvo(false), 2000)
+    try {
+      await updateConfig({ tarifa_kwh: tarifa, umidade_relativa: umidade, tema: config.tema })
+      setSalvo(true)
+      setTimeout(() => setSalvo(false), 2000)
+    } catch (err) {
+      alert(`Não foi possível salvar as configurações: ${err instanceof Error ? err.message : err}`)
+    }
   }
 
   async function trocarTema(tema: Tema): Promise<void> {
-    await updateConfig({ tarifa_kwh: tarifa, umidade_relativa: umidade, tema })
+    try {
+      // usa os valores já persistidos (não os do formulário, que podem estar em edição) para não salvar tarifa/umidade sem querer
+      await updateConfig({ tarifa_kwh: config.tarifa_kwh, umidade_relativa: config.umidade_relativa, tema })
+    } catch (err) {
+      alert(`Não foi possível trocar o tema: ${err instanceof Error ? err.message : err}`)
+    }
   }
 
   return (

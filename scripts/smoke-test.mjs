@@ -1,12 +1,16 @@
 import { _electron as electron } from 'playwright-core'
 import path from 'node:path'
 import fs from 'node:fs'
+import os from 'node:os'
 import { fileURLToPath } from 'node:url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const APP_DIR = path.resolve(__dirname, '..')
 const SHOT_DIR = path.join(APP_DIR, '.smoke-screenshots')
 fs.mkdirSync(SHOT_DIR, { recursive: true })
+
+// perfil isolado e descartável — nunca toca no banco de dados real do usuário
+const TEST_USER_DATA_DIR = fs.mkdtempSync(path.join(os.tmpdir(), 'green-flow-smoke-'))
 
 const electronBin = path.join(APP_DIR, 'node_modules', 'electron', 'dist', 'electron.exe')
 
@@ -38,12 +42,21 @@ async function main() {
   // ELECTRON_RUN_AS_NODE no ambiente do host faria o electron.exe rodar como Node puro (sem janela),
   // quebrando o handshake que o Playwright espera — remover para este processo filho.
   const { ELECTRON_RUN_AS_NODE, ...cleanEnv } = process.env
-  const app = await electron.launch({ executablePath: electronBin, args: [APP_DIR], env: cleanEnv, timeout: 30000 })
+  const app = await electron.launch({
+    executablePath: electronBin,
+    args: [APP_DIR, `--user-data-dir=${TEST_USER_DATA_DIR}`],
+    env: cleanEnv,
+    timeout: 30000
+  })
 
   app.process().stdout?.on('data', (d) => process.stdout.write('[main stdout] ' + d))
   app.process().stderr?.on('data', (d) => process.stdout.write('[main stderr] ' + d))
 
   const page = await app.firstWindow()
+  page.on('dialog', async (dialog) => {
+    console.log('[dialog]', dialog.type(), dialog.message())
+    await dialog.accept()
+  })
   const consoleErrors = []
   page.on('console', (msg) => {
     if (msg.type() === 'error') consoleErrors.push(msg.text())
@@ -137,10 +150,26 @@ async function main() {
   await page.waitForTimeout(300)
   await shot(page, 'relatorio-pdf')
 
+  // Exclusão em cascata: excluir a única sala deve remover o AC vinculado a ela também
+  await page.click('a[href="#/salas"]')
+  await page.waitForTimeout(300)
+  await clickByText(page, 'button', 'Excluir')
+  await page.waitForTimeout(500)
+  const linhasSalasDepois = await page.evaluate(() => document.querySelectorAll('tbody tr').length)
+  console.log('Linhas na tabela de salas após excluir (esperado 1, com a mensagem "nenhuma sala"):', linhasSalasDepois)
+  await shot(page, 'salas-apos-exclusao')
+
+  await page.click('a[href="#/ares-condicionados"]')
+  await page.waitForTimeout(300)
+  const linhasAcsDepois = await page.evaluate(() => document.querySelectorAll('tbody tr').length)
+  console.log('Linhas na tabela de ACs após excluir a sala (esperado 1, com a mensagem "nenhum AC" - cascade delete):', linhasAcsDepois)
+  await shot(page, 'ac-apos-exclusao-cascata')
+
   console.log('CONSOLE_ERRORS_COUNT:', consoleErrors.length)
   if (consoleErrors.length > 0) console.log('CONSOLE_ERRORS:', JSON.stringify(consoleErrors, null, 2))
 
   await app.close()
+  fs.rmSync(TEST_USER_DATA_DIR, { recursive: true, force: true })
   console.log('OK: smoke test concluído')
 }
 

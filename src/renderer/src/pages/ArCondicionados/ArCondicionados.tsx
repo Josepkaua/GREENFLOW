@@ -18,8 +18,12 @@ export default function ArCondicionados(): JSX.Element {
 
   async function excluir(id: number): Promise<void> {
     if (!confirm('Excluir este ar-condicionado?')) return
-    await window.api.ac.remove(id)
-    carregar()
+    try {
+      await window.api.ac.remove(id)
+      carregar()
+    } catch (err) {
+      alert(`Não foi possível excluir o ar-condicionado: ${err instanceof Error ? err.message : err}`)
+    }
   }
 
   const linhas = salas.flatMap((sala) => sala.ares.map((ac) => ({ ac, sala })))

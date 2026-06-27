@@ -54,6 +54,8 @@ export function SalaFormModal({ sala, onClose, onSaved }: SalaFormModalProps): J
       else await window.api.salas.create(form)
       onSaved()
       onClose()
+    } catch (err) {
+      alert(`Não foi possível salvar a sala: ${err instanceof Error ? err.message : err}`)
     } finally {
       setSalvando(false)
     }
@@ -97,7 +99,7 @@ export function SalaFormModal({ sala, onClose, onSaved }: SalaFormModalProps): J
               onChange={(e) => update('largura', Number(e.target.value))}
             />
           </Field>
-          <Field label="Pé-direito (m)">
+          <Field label="Altura (m)">
             <input
               required
               type="number"
